@@ -1,0 +1,55 @@
+version: '3.1'
+services:
+  postgres:
+    image: postgres:latest
+    volumes:
+      - .docker/data/postgresql:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=All2cjAsllvnnnr
+      - POSTGRES_USER=teamcity
+      - POSTGRES_DB=teamcity
+#    ports:
+#      - "5432:5432"
+  teamcity-server:
+    image: jetbrains/teamcity-server
+    ports:
+      - "1946:8111"
+    restart: always
+    volumes:
+      - .docker/data/teamcity/data:/data/teamcity_server/datadir
+      - .docker/data/teamcity/logs:/opt/teamcity/logs
+    networks:
+      - teamcity-network
+
+  teamcity-agent-1:
+    image: jetbrains/teamcity-agent
+    restart: always
+    volumes:
+      - .docker/teamcity/agent1-conf:/data/teamcity_agent/conf
+    environment:
+      - SERVER_URL=teamcity-server:8111
+    networks:
+      - teamcity-network
+
+  teamcity-agent-2:
+    image: jetbrains/teamcity-agent
+    restart: always
+    volumes:
+      - .docker/teamcity/agent2-conf:/data/teamcity_agent/conf
+    environment:
+      - SERVER_URL=teamcity-server:8111
+    networks:
+      - teamcity-network
+
+  teamcity-agent-3:
+    image: jetbrains/teamcity-agent
+    restart: always
+    volumes:
+      - .docker/teamcity/agent3-conf:/data/teamcity_agent/conf
+    environment:
+      - SERVER_URL=teamcity-server:8111
+    networks:
+      - teamcity-network
+
+networks:
+  teamcity-network:
