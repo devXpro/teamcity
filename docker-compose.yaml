@@ -8,6 +8,8 @@ services:
       - POSTGRES_PASSWORD=All2cjAsllvnnnr
       - POSTGRES_USER=teamcity
       - POSTGRES_DB=teamcity
+    networks:
+      - teamcity-network
 #    ports:
 #      - "5432:5432"
   teamcity-server:
